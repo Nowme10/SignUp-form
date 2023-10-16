@@ -2,9 +2,11 @@
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function Login() {
+  const history  = useNavigate(); 
 
     const [inputValue, setinputValue] = useState({
        
@@ -31,9 +33,7 @@ const addData = (e)=>{
   e.preventDefault();
 
   const getUserArr = localStorage.getItem("userData")
-
-
-const { email ,password} = inputValue;
+  const {email ,password} = inputValue;
 
  if(email === ""){
     alert("email field is requred")
@@ -43,14 +43,16 @@ const { email ,password} = inputValue;
     alert("  Atlist 8 characters is requred")
 }else{
     if(getUserArr && getUserArr.length){
-        const userData = JSON.parse("getUserArr");
+        const userData = JSON.parse(getUserArr);
         const userlogin = userData.filter((el, k )=> {
         return el.email === email && el.password === password
         });
         if(userlogin.length === 0){
             alert("Invalid email")
         }else{
-            console.log("user login successfully");
+            alert("user login successfully")
+            localStorage.setItem("user_login",JSON.stringify(userlogin))
+            history('/details')
         }
     }
 }   
@@ -80,6 +82,7 @@ const { email ,password} = inputValue;
       <Button className='col-lg-6' variant="primary" type="submit" onClick={addData}>
         Submit
       </Button>
+
     </Form>
     <p className='mt-3'> Don't Have An Account?<span className='text-primary'>SignUp</span></p>
             </div>

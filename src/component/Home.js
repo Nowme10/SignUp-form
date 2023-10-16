@@ -7,45 +7,80 @@ import { NavLink } from 'react-router-dom'
 
 
 function Home() {
-    const [inputValue, setinputValue] = useState({
-            name: "",
-            email:"",
-            date: "",
-            password: "" 
-    })
- const [data, setData] = useState([])
-const getdata = (e) =>{
+//     const [inputValue, setinputValue] = useState({
+//             name: "",
+//             email:"",
+//             date: "",
+//             password: "" 
+//     })
+//  const [data, setData] = useState([])
+ 
+// const getdata = (e) =>{
 
-//   console.log(e.target.value)
-const {value, name} = e.target;
-// console.log(value,name)
-setinputValue(()=>{
-    return{
-        ...inputValue,
-        [name]: value,
+// //   console.log(e.target.value)
+// const {value, name} = e.target;
+// // console.log(value,name)
+// setinputValue(()=>{
+//     return{
+//         ...inputValue,
+//         [name]: value,
 
-    }
-})
+//     }
+// })
 
-}
-const addData = (e)=>{
-      e.preventDefault();
-    const {name, email,date,password} = inputValue;
-    if(name === ""){
-        alert("name field is requred")
-    }else if(email === ""){
-        alert("email field is requred")
-    }else if (date === ""){
-        alert("date field is requred")
-    }else if(password === ""){
-        alert("password field is requred")
-    }else if(password.length < 8){
-        alert("  Atlist 8 characters is requred")
-    }else{
-        localStorage.setItem("userData",JSON.stringify([...data,inputValue]))
-    }
+// }
+// const addData = (e)=>{
+//       e.preventDefault();
+//     const {name, email,date,password} = inputValue;
+//     if(name === ""){
+//         alert("name field is requred")
+//     }else if(email === ""){
+//         alert("email field is requred")
+//     }else if (date === ""){
+//         alert("date field is requred")
+//     }else if(password === ""){
+//         alert("password field is requred")
+//     }else if(password.length < 8){
+//         alert("  Atlist 8 characters is requred")
+//     }else{
+//         localStorage.setItem("userData",JSON.stringify([...data,inputValue]))
+//     }
+const [inputValue, setInputValue] = useState({
+  name: '',
+  email: '',
+  date: '',
+  password: '',
+});
+
+const [data, setData] = useState([
+ ...JSON.parse(localStorage.getItem('userData'))])
+
+console.log(data)
+const getdata = (e) => {
+  const { value, name } = e.target;
+  setInputValue((prevInputValue) => ({
+    ...prevInputValue,
+    [name]: value,
+  }));
+};
+
+const addData = (e) => {
+  e.preventDefault();
+  const { name, email, date, password } = inputValue;
+
+  if (name === '' || email === '' || date === '' || password === '') {
+    alert('All fields are required');
+  } else if (password.length < 8) {
+    alert('Password should be at least 8 characters');
+  } else {
+    // Save the data to localStorage
+    const newData = [...data, inputValue];
+    localStorage.setItem('userData', JSON.stringify(newData));
+    setData(newData);
+  }
     
     }
+    
 
   return (
     <>

@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Dropdown  from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 import { NavLink } from 'react-router-dom'
+
 
 
 
@@ -50,12 +53,21 @@ const [inputValue, setInputValue] = useState({
   email: '',
   date: '',
   password: '',
+  type:''
 });
 
-const [data, setData] = useState([
- ...JSON.parse(localStorage.getItem('userData'))])
+const getUserData = async()=>{
+  const data = localStorage.getItem('userData');
+  const parseData =await JSON.parse(data)
+  if(parseData){
+    setData(parseData)
+  }
+  
+}
 
-console.log(data)
+const [data, setData] = useState([])
+
+console.log(data,'data')
 const getdata = (e) => {
   const { value, name } = e.target;
   setInputValue((prevInputValue) => ({
@@ -81,7 +93,9 @@ const addData = (e) => {
     
     }
     
-
+useEffect(()=>{
+  getUserData()
+},[])
   return (
     <>
     
@@ -89,6 +103,7 @@ const addData = (e) => {
         <section className='  d-flex justify-content-between'>
             <div className='left-data' style={{width: "100%"}}>
                 <h3 className='text-center col-lg-6 fw-bold text-primary'>Sign Up</h3>
+               
                 <Form>
       <Form.Group className="mb-2 col-lg-6 mt-3" controlId="formBasicUserName">
         <Form.Label className='text-primary'>User Name</Form.Label>
@@ -97,18 +112,31 @@ const addData = (e) => {
       </Form.Group> 
       <Form.Group className="mb-2 col-lg-6" controlId="formBasicEmail">
         <Form.Label className='text-primary' >Email address</Form.Label>
-        <Form.Control onChange={getdata} name='email' type="email" placeholder="Enter email" />    
-                  
+        <Form.Control onChange={getdata} name='email' type="email" placeholder="Enter email" />   
       </Form.Group> 
+     
+       
+
       <Form.Group className="mb-2 col-lg-6" controlId="formBasicEmail">
         <Form.Label className='text-primary'>Date of Birth</Form.Label>
         <Form.Control onChange={getdata} name='date' type="date"  />      
       </Form.Group> 
 
+
       <Form.Group className="mb-2 col-lg-6" controlId="formBasicPassword">
         <Form.Label className='text-primary'>Password</Form.Label>
         <Form.Control onChange={getdata} name='password' type="password" placeholder="Password" />
-      </Form.Group>  
+      </Form.Group> 
+
+       <Form.Group className="mb-2 col-lg-6" controlId="formBasicEmail">
+
+        <DropdownButton id="dropdown-basic-button" title={inputValue?.type? inputValue?.type:'select an user type'}  >
+        <Dropdown.Item eventKey={"user"} href="#/action-1" disabled>select</Dropdown.Item>
+      <Dropdown.Item eventKey={"user"} href="#/action-1" onClick={()=>setInputValue({...inputValue,type:'user'})}>User</Dropdown.Item>
+      <Dropdown.Item eventKey={"admin"} href="#/action-2 "onClick={()=>setInputValue({...inputValue,type:'admin'})}>Admin</Dropdown.Item>      
+      </DropdownButton>
+      </Form.Group> 
+ 
       
       <Button className='col-lg-6' variant="primary" type="submit" onClick={addData}>
         Submit

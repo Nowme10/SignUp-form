@@ -69,8 +69,7 @@ const addData = (e)=>{
       
       <Form.Group className="mb-2 col-lg-6" controlId="formBasicEmail">
         <Form.Label className='text-primary' >Email address</Form.Label>
-        <Form.Control onChange={getdata} name='email' type="email" placeholder="Enter email" />   
-                  
+        <Form.Control onChange={getdata} name='email' type="email" placeholder="Enter email" />                     
       </Form.Group> 
      
 
@@ -97,3 +96,6 @@ const addData = (e)=>{
     </>
   )
 }
+
+
+

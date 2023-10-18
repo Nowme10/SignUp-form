@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Dropdown  from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import { useNavigate } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
 
 
@@ -48,6 +49,10 @@ function Home() {
 //     }else{
 //         localStorage.setItem("userData",JSON.stringify([...data,inputValue]))
 //     }
+const history  = useNavigate(); 
+
+
+
 const [inputValue, setInputValue] = useState({
   name: '',
   email: '',
@@ -84,18 +89,22 @@ const addData = (e) => {
     alert('All fields are required');
   } else if (password.length < 8) {
     alert('Password should be at least 8 characters');
-  } else {
+  } else {    
+  
     // Save the data to localStorage
     const newData = [...data, inputValue];
     localStorage.setItem('userData', JSON.stringify(newData));
     setData(newData);
+    // history('/details')
+    
+      history('/details')
+    
   }
-    
-    }
-    
-useEffect(()=>{
-  getUserData()
-},[])
+   
+}
+// useEffect(()=>{
+//   getUserData()
+// },[])
   return (
     <>
     
@@ -154,5 +163,6 @@ useEffect(()=>{
     </>
   )
 }
+
 
 export default Home

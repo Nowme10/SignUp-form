@@ -11,47 +11,9 @@ import { NavLink } from 'react-router-dom'
 
 
 function Home() {
-//     const [inputValue, setinputValue] = useState({
-//             name: "",
-//             email:"",
-//             date: "",
-//             password: "" 
-//     })
-//  const [data, setData] = useState([])
- 
-// const getdata = (e) =>{
 
-// //   console.log(e.target.value)
-// const {value, name} = e.target;
-// // console.log(value,name)
-// setinputValue(()=>{
-//     return{
-//         ...inputValue,
-//         [name]: value,
-
-//     }
-// })
-
-// }
-// const addData = (e)=>{
-//       e.preventDefault();
-//     const {name, email,date,password} = inputValue;
-//     if(name === ""){
-//         alert("name field is requred")
-//     }else if(email === ""){
-//         alert("email field is requred")
-//     }else if (date === ""){
-//         alert("date field is requred")
-//     }else if(password === ""){
-//         alert("password field is requred")
-//     }else if(password.length < 8){
-//         alert("  Atlist 8 characters is requred")
-//     }else{
-//         localStorage.setItem("userData",JSON.stringify([...data,inputValue]))
-//     }
 const history  = useNavigate(); 
-
-
+const dataFromLocalStorage = JSON.parse(localStorage.getItem('userData'))
 
 const [inputValue, setInputValue] = useState({
   name: '',
@@ -60,31 +22,25 @@ const [inputValue, setInputValue] = useState({
   password: '',
   type:''
 });
+const [dataToUpdate, setDataToUpdate] = useState(dataFromLocalStorage)
 
-const getUserData = async()=>{
-  const data = localStorage.getItem('userData');
-  const parseData =await JSON.parse(data)
-  if(parseData){
-    setData(parseData)
-  }
-  
-}
 
-const [data, setData] = useState([])
 
-console.log(data,'data')
+
 const getdata = (e) => {
-  const { value, name } = e.target;
+  const { name, value } = e.target;
   setInputValue((prevInputValue) => ({
     ...prevInputValue,
     [name]: value,
   }));
 };
 
+
 const addData = (e) => {
   e.preventDefault();
   const { name, email, date, password } = inputValue;
-
+  const updatedArray = [...dataToUpdate, inputValue];
+  
   if (name === '' || email === '' || date === '' || password === '') {
     alert('All fields are required');
   } else if (password.length < 8) {
@@ -92,19 +48,22 @@ const addData = (e) => {
   } else {    
   
     // Save the data to localStorage
-    const newData = [...data, inputValue];
-    localStorage.setItem('userData', JSON.stringify(newData));
-    setData(newData);
+    
+    localStorage.setItem('userData', JSON.stringify(updatedArray));
+    //setData(newData);
     // history('/details')
     
       history('/details')
     
   }
+  if(inputValue?.type === 'admin'){
+    history('/dashboard')
+  }else{
+    history('/details')
+  }
    
 }
-// useEffect(()=>{
-//   getUserData()
-// },[])
+
   return (
     <>
     

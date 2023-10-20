@@ -1,11 +1,12 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useNavigate } from 'react-router-dom'
 
 
 export default function Login() {
+  const getUserArr = localStorage.getItem("userData")
   const history  = useNavigate(); 
 
     const [inputValue, setinputValue] = useState({
@@ -15,6 +16,13 @@ export default function Login() {
         password: "" 
 })
 const [data, setData] = useState([])
+const [userData, setUserData] = useState([])
+useEffect(() => {
+  setUserData(JSON.parse(getUserArr))
+}, [getUserArr])
+useEffect(() => {
+  console.log(userData)
+}, [userData])
 const getdata = (e) =>{
 
 //   console.log(e.target.value)
@@ -29,11 +37,26 @@ return{
 })
 
 }
-const addData = (e)=>{
+const submitData = (e) => {
+  console.log(e.target)
+  e.preventDefault();
+  const {email ,password} = inputValue;
+  if(email === "" || password.length < 8 || password === ""){
+    alert('wrong username or pass')
+  } else {
+    
+   if(userData.length > 0 && userData[0].type === "admin") {
+    console.log("ksabvdj")
+    history("/dashboard")
+   } 
+  }
+}
+const addData = (e)=>{  
   e.preventDefault();
 
-  const getUserArr = localStorage.getItem("userData")
+  
   const {email ,password} = inputValue;
+  
 
  if(email === ""){
     alert("email field is requred")
@@ -41,20 +64,27 @@ const addData = (e)=>{
     alert("password field is requred")
 }else if(password.length < 8){
     alert("  Atlist 8 characters is requred")
+    
+}
+else if(userData.length > 0 && userData[0].type === "admin"){
+  history('/dashboard')
 }else{
+  
     if(getUserArr && getUserArr.length){
-        const userData = JSON.parse(getUserArr);
-        const userlogin = userData.filter((el, k )=> {
-        return el.email === email && el.password === password
-        });
-        if(userlogin.length === 0){
-            alert("Invalid email")
-        }else{
-            alert("user login successfully")
-            localStorage.setItem("user_login",JSON.stringify(userlogin))
-            history('/details')
-        }
-    }
+      const userData = JSON.parse(getUserArr);
+      const userlogin = userData.filter((el, k )=> {
+      return el.email === email && el.password === password
+      });
+      if(userlogin.length === 0){
+          alert("Invalid email")
+      }else{
+          alert("user login successfully")
+          localStorage.setItem("user_login",JSON.stringify(userlogin))
+          //history('/details')
+      }
+  }
+  
+   
 }   
 
 }
@@ -78,7 +108,7 @@ const addData = (e)=>{
         <Form.Control onChange={getdata} name='password' type="password" placeholder="Password" />
       </Form.Group>  
       
-      <Button className='col-lg-6' variant="primary" type="submit" onClick={addData}>
+      <Button className='col-lg-6' variant="primary" type="submit" onClick={submitData}>
         Submit
       </Button>
 
